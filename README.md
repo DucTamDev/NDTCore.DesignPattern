@@ -1,0 +1,1 @@
+# NDTCore.DesignPattern
