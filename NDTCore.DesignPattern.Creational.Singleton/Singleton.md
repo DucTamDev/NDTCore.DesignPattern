@@ -1,7 +1,5 @@
 ﻿# Singleton Pattern
 
----
-
 ## 1. Vấn đề cần giải quyết
 
 Trong nhiều ứng dụng, có những tài nguyên chỉ nên tồn tại **một phiên bản duy nhất** trong toàn bộ vòng đời của ứng dụng. Ví dụ:

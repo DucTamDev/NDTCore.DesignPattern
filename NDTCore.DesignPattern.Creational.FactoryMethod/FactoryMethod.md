@@ -1,7 +1,5 @@
 ﻿# **Factory Method Pattern**
 
----
-
 ## **1. Vấn đề cần giải quyết**
 
 Trong một hệ thống có nhiều loại đối tượng cần được khởi tạo (ví dụ: thông báo, tài liệu, hoặc giao diện người dùng), nếu bạn sử dụng trực tiếp từ khóa `new` để tạo đối tượng, mã nguồn sẽ trở nên khó mở rộng khi cần thêm loại đối tượng mới.

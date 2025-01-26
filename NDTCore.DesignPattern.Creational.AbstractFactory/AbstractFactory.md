@@ -1,7 +1,5 @@
 ﻿# **Abstract Factory Pattern**
 
----
-
 ## **1. Vấn đề cần giải quyết**
 
 Khi xây dựng các ứng dụng hỗ trợ đa nền tảng, bạn cần đảm bảo giao diện (UI) và chức năng của ứng dụng phù hợp với từng hệ điều hành (Windows, MacOS, Linux). Ví dụ:

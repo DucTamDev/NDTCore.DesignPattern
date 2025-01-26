@@ -1,7 +1,5 @@
 ﻿# Adapter Pattern
 
----
-
 ## **1. Vấn đề cần giải quyết**
 
 Trong các ứng dụng phần mềm, đôi khi chúng ta phải làm việc với nhiều thư viện hoặc hệ thống có giao diện khác nhau. Khi các hệ thống này không tương thích với nhau, chúng ta cần một cách để làm việc với chúng mà không thay đổi mã nguồn của hệ thống. **Adapter Pattern** giúp giải quyết vấn đề này bằng cách chuyển đổi giữa các giao diện không tương thích.
