@@ -33,8 +33,7 @@ Tài liệu này phác thảo blueprint cho dự án phần mềm của chúng t
      - [State Pattern](#state-pattern)
      - [Strategy Pattern](#strategy-pattern)
      - [Template Method Pattern](#template-method-pattern)
-3. [Liên Kết](#liên-kết)
-4. [Tài Liệu Tham Khảo](#tài-liệu-tham-khảo)
+3. [Tài Liệu Tham Khảo](#tài-liệu-tham-khảo)
 
 ## Mục Tiêu Project
 
@@ -164,12 +163,6 @@ Behavioral patterns liên quan đến cách các đối tượng tương tác v�
 22. **[Template Method Pattern](#template-method-pattern)**
     - Định nghĩa một phương thức trong class cha và để các subclass cung cấp các bước cụ thể của thuật toán mà không làm thay đổi cấu trúc tổng thể của nó.
     - [Chi tiết](https://github.com/DucTamDev/NDTCore.DesignPattern/blob/main/NDTCore.DesignPattern.Behavioral.TemplateMethod/TemplateMethod.md)
-
----
-
-## Liên Kết
-
-Design patterns [refactoring.guru](https://refactoring.guru/design-patterns)
 
 ---
 
