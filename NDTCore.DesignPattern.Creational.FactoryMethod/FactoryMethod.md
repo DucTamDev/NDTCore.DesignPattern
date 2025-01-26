@@ -1,18 +1,49 @@
 ﻿# **Factory Method Pattern**
 
-## **1. Định nghĩa**
+---
 
-**Factory Method** là một **Creational Design Pattern** cung cấp một giao diện (interface) để tạo các đối tượng, nhưng cho phép các lớp con quyết định loại đối tượng nào sẽ được tạo.  
-Thay vì sử dụng trực tiếp từ khóa `new` để khởi tạo đối tượng, Factory Method chuyển trách nhiệm tạo đối tượng này sang các lớp con cụ thể.
+## **1. Vấn đề cần giải quyết**
+
+Trong một hệ thống có nhiều loại đối tượng cần được khởi tạo (ví dụ: thông báo, tài liệu, hoặc giao diện người dùng), nếu bạn sử dụng trực tiếp từ khóa `new` để tạo đối tượng, mã nguồn sẽ trở nên khó mở rộng khi cần thêm loại đối tượng mới.
+
+**Vấn đề**:
+
+- Làm thế nào để tách biệt logic khởi tạo đối tượng khỏi mã nguồn chính?
+- Làm thế nào để mở rộng các loại đối tượng mà không sửa đổi mã hiện tại?
+
+**Giải pháp**:  
+Sử dụng **Factory Method Pattern** để di chuyển logic khởi tạo đối tượng sang các lớp con cụ thể, giúp mã dễ bảo trì và mở rộng hơn.
 
 ---
 
-## **2. Thành phần chính**
+## **2. Định nghĩa**
 
-Factory Method hoạt động dựa trên hai thành phần chính:
+**Factory Method** là một **Creational Design Pattern** cung cấp một giao diện để tạo các đối tượng, nhưng cho phép các lớp con quyết định loại đối tượng cụ thể nào sẽ được tạo.
 
-- **Creator**: Lớp cơ sở định nghĩa một phương thức factory trừu tượng (`FactoryMethod`), được các lớp con kế thừa và triển khai.
-- **Concrete Product**: Các lớp cụ thể được tạo ra thông qua Factory Method.
+Thay vì sử dụng trực tiếp từ khóa `new`, phương pháp này sử dụng một phương thức "Factory" để tạo ra các đối tượng.
+
+---
+
+## **3. Thành phần chính**
+
+1. **Product**  
+   Giao diện hoặc lớp trừu tượng đại diện cho các đối tượng được tạo ra bởi Factory Method.
+
+   - Ví dụ: `IProduct`.
+
+2. **Concrete Product**  
+   Cài đặt cụ thể của `Product` được tạo ra bởi các Factory Method.
+
+   - Ví dụ: `ConcreteProductA`, `ConcreteProductB`.
+
+3. **Creator**  
+   Lớp cơ sở định nghĩa một Factory Method trừu tượng để các lớp con triển khai. Creator có thể chứa logic chung để sử dụng đối tượng được tạo ra.
+
+   - Ví dụ: `Creator`.
+
+4. **Concrete Creator**  
+   Lớp con cụ thể cài đặt phương thức Factory Method để trả về các đối tượng cụ thể (`Concrete Product`).
+   - Ví dụ: `ConcreteCreatorA`, `ConcreteCreatorB`.
 
 ---
 
@@ -24,17 +55,23 @@ _Sơ đồ UML mô tả quan hệ giữa các thành phần trong mẫu thiết 
 
 ---
 
-## **4. Ưu điểm**
+## **5. Ưu điểm & nhược điểm**
 
-- **Đảm bảo tính mở rộng**: Dễ dàng thêm loại sản phẩm mới mà không sửa đổi mã nguồn của lớp Creator.
-- **Loại bỏ sự phụ thuộc trực tiếp vào các lớp cụ thể**: Giảm sự phụ thuộc vào việc khởi tạo các đối tượng cụ thể (tăng tính linh hoạt).
+### **Ưu điểm**
 
----
+1. **Đảm bảo tính mở rộng**  
+   Dễ dàng thêm loại sản phẩm mới mà không cần sửa đổi mã nguồn của Creator.
+2. **Giảm sự phụ thuộc**  
+   Loại bỏ sự phụ thuộc trực tiếp vào các lớp cụ thể.
+3. **Tính linh hoạt**  
+   Cho phép thay đổi các lớp cụ thể được sử dụng trong ứng dụng mà không cần thay đổi mã nguồn của Client.
 
-## **5. Nhược điểm**
+### **Nhược điểm**
 
-- **Phức tạp hơn**: Yêu cầu các lớp con phải triển khai Factory Method.
-- **Thêm lớp mới**: Việc thêm nhiều Concrete Product có thể làm tăng số lượng lớp trong ứng dụng.
+1. **Tăng độ phức tạp**  
+   Việc yêu cầu các lớp con triển khai Factory Method có thể làm tăng số lượng lớp trong hệ thống.
+2. **Phải tạo thêm lớp mới**  
+   Khi thêm sản phẩm mới, cần tạo thêm lớp Factory mới, có thể làm mã nguồn trở nên nặng nề.
 
 ---
 
@@ -43,94 +80,83 @@ _Sơ đồ UML mô tả quan hệ giữa các thành phần trong mẫu thiết 
 ### **C# Code**
 
 ```csharp
-// Abstract Product
-public interface IButton
-{
-    void Render();
-}
 
-// Concrete Product
-public class WindowsButton : IButton
+namespace NDTCore.DesignPattern.Creational.FactoryMethod
 {
-    public void Render()
+    // Abstract Product
+    public interface IButton
     {
-        Console.WriteLine("Render Windows Button");
+        void Render();
+    }
+
+    // Concrete Product
+    public class WindowsButton : IButton
+    {
+        public void Render()
+        {
+            Console.WriteLine("Render Windows Button");
+        }
+    }
+
+    public class MacOSButton : IButton
+    {
+        public void Render()
+        {
+            Console.WriteLine("Render macOS Button");
+        }
+    }
+
+    // Abstract Creator
+    public abstract class Dialog
+    {
+        public abstract IButton CreateButton();
+
+        public void RenderButton()
+        {
+            IButton button = CreateButton();
+            button.Render();
+        }
+    }
+
+    // Concrete Creator
+    public class WindowsDialog : Dialog
+    {
+        public override IButton CreateButton()
+        {
+            return new WindowsButton();
+        }
+    }
+
+    public class MacOSDialog : Dialog
+    {
+        public override IButton CreateButton()
+        {
+            return new MacOSButton();
+        }
+    }
+
+    // Client
+    static class Program
+    {
+        static void Main(string[] args)
+        {
+            Dialog dialog;
+
+            string os = "Windows";
+            if (os == "Windows")
+                dialog = new WindowsDialog();
+            else
+                dialog = new MacOSDialog();
+
+            dialog.RenderButton();
+        }
     }
 }
 
-public class MacOSButton : IButton
-{
-    public void Render()
-    {
-        Console.WriteLine("Render macOS Button");
-    }
-}
-
-// Abstract Creator
-public abstract class Dialog
-{
-    public abstract IButton CreateButton();
-
-    public void RenderButton()
-    {
-        IButton button = CreateButton();
-        button.Render();
-    }
-}
-
-// Concrete Creator
-public class WindowsDialog : Dialog
-{
-    public override IButton CreateButton()
-    {
-        return new WindowsButton();
-    }
-}
-
-public class MacOSDialog : Dialog
-{
-    public override IButton CreateButton()
-    {
-        return new MacOSButton();
-    }
-}
-
-// Client
-class Program
-{
-    static void Main(string[] args)
-    {
-        Dialog dialog;
-
-        string os = "Windows";
-        if (os == "Windows")
-            dialog = new WindowsDialog();
-        else
-            dialog = new MacOSDialog();
-
-        dialog.RenderButton();
-    }
-}
 ```
 
 ---
 
-## **7. Khi nào nên dùng Factory Method**
+## **7. Tài liệu**
 
-- Khi một lớp không biết trước về loại đối tượng cụ thể cần được tạo.
-- Khi muốn giảm sự phụ thuộc vào các lớp cụ thể, tăng tính linh hoạt và mở rộng.
-- Khi ứng dụng cần tuân theo **Open/Closed Principle** (mở rộng mà không sửa đổi mã hiện tại).
-
----
-
-## **8. Ví dụ thực tế**
-
-- **Logger System**: Tạo các Logger khác nhau (`FileLogger`, `DatabaseLogger`) dựa trên môi trường.
-
----
-
-## **9. Tài liệu**
-
-Design patterns [refactoring.guru](https://refactoring.guru/design-patterns)
-
----
+- [Design Patterns - Refactoring Guru](https://refactoring.guru/design-patterns)

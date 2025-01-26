@@ -1,8 +1,8 @@
-﻿# **Abstract Factory Pattern**
+﻿# **Builder Pattern**
 
-## **Vấn đề cần giải quyết**
+## **1. Vấn đề cần giải quyết**
 
-### 1. **Khó khăn trong việc tạo đối tượng phức tạp**
+### **Khó khăn trong việc tạo đối tượng phức tạp**
 
 Khi một đối tượng có quá nhiều thuộc tính hoặc cần một số bước cấu hình phức tạp để xây dựng, việc sử dụng constructor thông thường với nhiều tham số có thể trở nên rất phức tạp và dễ gây ra lỗi. Điều này thường xảy ra khi các đối tượng có quá nhiều thuộc tính tùy chọn hoặc bắt buộc, khiến cho việc tạo đối tượng trở nên khó hiểu và khó duy trì.
 
@@ -35,7 +35,7 @@ var car2 = new Car("Electric Motor", 2, "Blue", false, true);
 
 ```
 
-### 2. **Khó khăn trong việc thay đổi cấu trúc đối tượng**
+### **Khó khăn trong việc thay đổi cấu trúc đối tượng**
 
 Khi cấu trúc của đối tượng thay đổi (thêm bớt thuộc tính, thay đổi logic tạo đối tượng), bạn sẽ phải sửa đổi lại tất cả những nơi mà đối tượng đó được tạo ra, điều này rất dễ dẫn đến việc không đồng bộ trong toàn bộ hệ thống.
 
@@ -89,13 +89,13 @@ var car2 = new Car("Electric Motor", 2, "Blue", false);
 
 ```
 
-## **1. Định nghĩa**
+## **2. Định nghĩa**
 
 **Builder Design Pattern** là một mẫu thiết kế thuộc nhóm **Creational**, được sử dụng để xây dựng các đối tượng phức tạp theo từng bước. Mẫu thiết kế này tách biệt quá trình xây dựng đối tượng khỏi phần biểu diễn của nó, cho phép sử dụng cùng một quy trình xây dựng để tạo ra các biểu diễn khác nhau.
 
 ---
 
-## **2. Thành phần chính**
+## **3. Thành phần chính**
 
 1. **Product**
    Đối tượng phức tạp được xây dựng thông qua các bước cụ thể của Builder.
@@ -123,7 +123,7 @@ var car2 = new Car("Electric Motor", 2, "Blue", false);
 
 ---
 
-## **3. Sơ Đồ UML**
+## **4. Sơ Đồ UML**
 
 ![Builder UML](https://refactoring.guru/images/patterns/diagrams/builder/structure.png)
 
@@ -131,7 +131,9 @@ _Sơ đồ UML mô tả quan hệ giữa các thành phần trong mẫu thiết 
 
 ---
 
-## **4. Ưu điểm**
+## **5. Ưu điểm & nhược điểm**
+
+### **Ưu điểm**
 
 1. **Tách biệt xây dựng và biểu diễn đối tượng**:
    Builder cho phép tách biệt quá trình xây dựng đối tượng phức tạp khỏi mã nguồn sử dụng đối tượng. Điều này giúp mã nguồn của chúng ta dễ dàng bảo trì và mở rộng.
@@ -150,7 +152,7 @@ _Sơ đồ UML mô tả quan hệ giữa các thành phần trong mẫu thiết 
 
 ---
 
-## **5. Nhược điểm**
+### **Nhược điểm**
 
 1. **Tăng số lượng lớp**:
    Sử dụng Builder dẫn đến việc phải tạo ra nhiều lớp (giao diện, Concrete Builder, Director), điều này có thể làm tăng độ phức tạp của hệ thống, đặc biệt khi đối tượng chỉ có một số lượng nhỏ thuộc tính.
@@ -172,130 +174,134 @@ _Sơ đồ UML mô tả quan hệ giữa các thành phần trong mẫu thiết 
 ## **6. Ví Dụ Code**
 
 ```csharp
-// Product
-public class Car
-{
-    public string? Engine { get; set; }
-    public int Seats { get; set; }
-    public string? Color { get; set; }
 
-    public override string ToString()
+namespace NDTCore.DesignPattern.Creational.Builder
+{
+
+    // Product
+    public class Car
     {
-        return $"Car [Engine: {Engine}, Seats: {Seats}, Color: {Color}]";
+        public string? Engine { get; set; }
+        public int Seats { get; set; }
+        public string? Color { get; set; }
+
+        public override string ToString()
+        {
+            return $"Car [Engine: {Engine}, Seats: {Seats}, Color: {Color}]";
+        }
+    }
+
+    // Builder Interface
+    public interface ICarBuilder
+    {
+        ICarBuilder SetEngine(string engine);
+        ICarBuilder SetSeats(int seats);
+        ICarBuilder SetColor(string color);
+        Car Build();
+    }
+
+    // Abstract Builder (Optional - for shared behavior)
+    public abstract class CarBuilder : ICarBuilder
+    {
+        protected Car _car = new Car();
+
+        public abstract ICarBuilder SetEngine(string engine);
+        public abstract ICarBuilder SetSeats(int seats);
+        public abstract ICarBuilder SetColor(string color);
+
+        public Car Build()
+        {
+            return _car;
+        }
+    }
+
+    // Concrete Builder for Sports Car
+    public class SportsCarBuilder : CarBuilder
+    {
+        public override ICarBuilder SetEngine(string engine)
+        {
+            _car.Engine = engine;
+            return this;
+        }
+
+        public override ICarBuilder SetSeats(int seats)
+        {
+            _car.Seats = seats;
+            return this;
+        }
+
+        public override ICarBuilder SetColor(string color)
+        {
+            _car.Color = color;
+            return this;
+        }
+    }
+
+    // Concrete Builder for SUV
+    public class SUVCarBuilder : CarBuilder
+    {
+        public override ICarBuilder SetEngine(string engine)
+        {
+            _car.Engine = engine;
+            return this;
+        }
+
+        public override ICarBuilder SetSeats(int seats)
+        {
+            _car.Seats = seats;
+            return this;
+        }
+
+        public override ICarBuilder SetColor(string color)
+        {
+            _car.Color = color;
+            return this;
+        }
+    }
+
+
+    // Director
+    public class CarDirector
+    {
+        public Car ConstructSportsCar(ICarBuilder builder)
+        {
+            return builder.SetEngine("V8 Engine")
+                    .SetSeats(2)
+                    .SetColor("Black")
+                    .Build();
+        }
+
+        public Car ConstructSUVCar(ICarBuilder builder)
+        {
+            return builder.SetEngine("Turbo Diesel")
+                     .SetSeats(4)
+                     .SetColor("Red")
+                     .Build();
+        }
+    }
+
+    // Usage
+    static class Program
+    {
+        static void Main(string[] args)
+        {
+            CarDirector director = new CarDirector();
+
+            ICarBuilder builderSportCar = new SportsCarBuilder();
+            ICarBuilder builderSUVCar = new SUVCarBuilder();
+
+            Car sportCar = director.ConstructSportsCar(builderSportCar);
+
+            Car SUVCar = director.ConstructSUVCar(builderSUVCar);
+
+            Console.WriteLine(sportCar);
+
+            Console.WriteLine(SUVCar);
+        }
     }
 }
-
-// Builder Interface
-public interface ICarBuilder
-{
-    ICarBuilder SetEngine(string engine);
-    ICarBuilder SetSeats(int seats);
-    ICarBuilder SetColor(string color);
-    Car Build();
-}
-
-// Abstract Builder (Optional - for shared behavior)
-public abstract class CarBuilder : ICarBuilder
-{
-    protected Car _car = new Car();
-
-    public abstract ICarBuilder SetEngine(string engine);
-    public abstract ICarBuilder SetSeats(int seats);
-    public abstract ICarBuilder SetColor(string color);
-
-    public Car Build()
-    {
-        return _car;
-    }
-}
-
-// Concrete Builder for Sports Car
-public class SportsCarBuilder : CarBuilder
-{
-    public override ICarBuilder SetEngine(string engine)
-    {
-        _car.Engine = engine;
-        return this;
-    }
-
-    public override ICarBuilder SetSeats(int seats)
-    {
-        _car.Seats = seats;
-        return this;
-    }
-
-    public override ICarBuilder SetColor(string color)
-    {
-        _car.Color = color;
-        return this;
-    }
-}
-
-// Concrete Builder for SUV
-public class SUVCarBuilder : CarBuilder
-{
-    public override ICarBuilder SetEngine(string engine)
-    {
-        _car.Engine = engine;
-        return this;
-    }
-
-    public override ICarBuilder SetSeats(int seats)
-    {
-        _car.Seats = seats;
-        return this;
-    }
-
-    public override ICarBuilder SetColor(string color)
-    {
-        _car.Color = color;
-        return this;
-    }
-}
-
-
-// Director
-public class CarDirector
-{
-    public Car ConstructSportsCar(ICarBuilder builder)
-    {
-        return builder.SetEngine("V8 Engine")
-                .SetSeats(2)
-                .SetColor("Black")
-                .Build();
-    }
-
-    public Car ConstructSUVCar(ICarBuilder builder)
-    {
-        return builder.SetEngine("Turbo Diesel")
-                 .SetSeats(4)
-                 .SetColor("Red")
-                 .Build();
-    }
-}
-
-// Usage
-class Program
-{
-    static void Main(string[] args)
-    {
-        CarDirector director = new CarDirector();
-
-        ICarBuilder builderSportCar = new SportsCarBuilder();
-        ICarBuilder builderSUVCar = new SUVCarBuilder();
-
-        Car sportCar = director.ConstructSportsCar(builderSportCar);
-
-        Car SUVCar = director.ConstructSUVCar(builderSUVCar);
-
-        Console.WriteLine(sportCar);
-
-        Console.WriteLine(SUVCar);
-    }
-}
-
 ```
 
 ## **7. Tài liệu**
 
-Design patterns [refactoring.guru](https://refactoring.guru/design-patterns)
+- [Design Patterns - Refactoring Guru](https://refactoring.guru/design-patterns)

@@ -1,68 +1,71 @@
-﻿// Abstract Product
-public interface IButton
+﻿namespace NDTCore.DesignPattern.Creational.FactoryMethod
 {
-    void Render();
-}
-
-// Concrete Product
-public class WindowsButton : IButton
-{
-    public void Render()
+    // Abstract Product
+    public interface IButton
     {
-        Console.WriteLine("Render Windows Button");
+        void Render();
     }
-}
 
-public class MacOSButton : IButton
-{
-    public void Render()
+    // Concrete Product
+    public class WindowsButton : IButton
     {
-        Console.WriteLine("Render macOS Button");
+        public void Render()
+        {
+            Console.WriteLine("Render Windows Button");
+        }
     }
-}
 
-// Abstract Creator
-public abstract class Dialog
-{
-    public abstract IButton CreateButton();
-
-    public void RenderButton()
+    public class MacOSButton : IButton
     {
-        IButton button = CreateButton();
-        button.Render();
+        public void Render()
+        {
+            Console.WriteLine("Render macOS Button");
+        }
     }
-}
 
-// Concrete Creator
-public class WindowsDialog : Dialog
-{
-    public override IButton CreateButton()
+    // Abstract Creator
+    public abstract class Dialog
     {
-        return new WindowsButton();
+        public abstract IButton CreateButton();
+
+        public void RenderButton()
+        {
+            IButton button = CreateButton();
+            button.Render();
+        }
     }
-}
 
-public class MacOSDialog : Dialog
-{
-    public override IButton CreateButton()
+    // Concrete Creator
+    public class WindowsDialog : Dialog
     {
-        return new MacOSButton();
+        public override IButton CreateButton()
+        {
+            return new WindowsButton();
+        }
     }
-}
 
-// Client
-class Program
-{
-    static void Main(string[] args)
+    public class MacOSDialog : Dialog
     {
-        Dialog dialog;
+        public override IButton CreateButton()
+        {
+            return new MacOSButton();
+        }
+    }
 
-        string os = "Windows";
-        if (os == "Windows")
-            dialog = new WindowsDialog();
-        else
-            dialog = new MacOSDialog();
+    // Client
+    static class Program
+    {
+        static void Main(string[] args)
+        {
+            Dialog dialog;
 
-        dialog.RenderButton();
+            string os = "Windows";
+            if (os == "Windows")
+                dialog = new WindowsDialog();
+            else
+                dialog = new MacOSDialog();
+
+            dialog.RenderButton();
+        }
     }
 }
